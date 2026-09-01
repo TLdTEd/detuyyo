@@ -207,3 +207,319 @@
         }
     </style>
 </head>
+    <body>
+
+    <!-- REPRODUCTOR DE MÚSICA DE FONDO (MENÚ PRINCIPAL) -->
+    <!-- Reemplaza "musica_fondo.mp3" por tu archivo real en GitHub -->
+    <audio id="bg-music" src="musica_fondo.mp3" loop></audio>
+
+    <!-- CONTROL DISCRETO DE AMBIENTE -->
+    <div class="ambient-controller">
+        <button class="btn-mute" onclick="toggleMuteBg()">🎵</button>
+        <input type="range" id="bg-volume" min="0" max="1" step="0.05" value="0.5" oninput="changeBgVolume(this.value)">
+    </div>
+
+    <!-- CONTENEDOR PARA LOS AUDIOS DE VOZ FLOTANTES (SE GENERAN POR JS) -->
+    <div id="bubbles-layer"></div>
+
+    <!-- ENCABEZADO DEL SANTUARIO -->
+    <header class="header-santuario">
+        <h1>Nuestro Santuario</h1>
+        <p>Un espacio seguro diseñado para los dos ✨</p>
+    </header>
+
+    <!-- MENÚ PRINCIPAL: 7 BOTONES INTERACTIVOS -->
+    <nav class="grid-santuario">
+        <button class="btn-santuario" onclick="openModal('modal-capsula')">
+            <span class="btn-title">⏱️ La Cápsula de 8 Minutos</span>
+            <span class="btn-desc">Un espacio de alta prioridad para leernos antes de que se cierre.</span>
+        </button>
+
+        <button class="btn-santuario" onclick="openModal('modal-reto')">
+            <span class="btn-title">📅 El Reto de los 8 Minutos</span>
+            <span class="btn-desc">Una pregunta diaria aleatoria para conocernos un poco más.</span>
+        </button>
+
+        <button class="btn-santuario" onclick="openModal('modal-encuentro')">
+            <span class="btn-title">✨ Botón de Encuentro</span>
+            <span class="btn-desc">Indica que quieres ver en persona al otro y consulta disponibilidad.</span>
+        </button>
+
+        <button class="btn-santuario" onclick="openModal('modal-diario')">
+            <span class="btn-title">🎞️ Nuestro Diario Visual</span>
+            <span class="btn-desc">Nuestra galería compartida de fotos con notas escritas a mano.</span>
+        </button>
+
+        <button class="btn-santuario" onclick="openModal('modal-clima')">
+            <span class="btn-title">🤍 Nuestro Clima Emocional</span>
+            <span class="btn-desc">Sincroniza cómo te sientes hoy para que el otro sepa cuidarte.</span>
+        </button>
+
+        <button class="btn-santuario" onclick="openModal('modal-gratitud')">
+            <span class="btn-title">🙏 Muro de Gratitud Abierta</span>
+            <span class="btn-desc">Un lienzo libre para agradecernos las cosas lindas del día.</span>
+        </button>
+
+        <button class="btn-santuario" onclick="openModal('modal-banda')">
+            <span class="btn-title">🎵 La Banda Sonora del Día</span>
+            <span class="btn-desc">La canción que escuchaste hoy y te hizo pensar en el otro.</span>
+        </button>
+    </nav>
+
+
+    <!-- ==================== VENTANAS EMERGENTES (MODALES) ==================== -->
+
+    <!-- 1. LA CÁPSULA DE 8 MINUTOS -->
+    <div id="modal-capsula" class="modal-overlay" onclick="closeModalOutside(event, 'modal-capsula')">
+        <div class="modal-card">
+            <button class="btn-close-modal" onclick="closeModal('modal-capsula')">✕</button>
+            <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:15px;">⏱️ La Cápsula</h3>
+            <div id="capsula-timer" style="font-size:42px; font-weight:600; color:var(--accent-warm); margin-bottom:20px;">08:00</div>
+            <p style="color:var(--text-muted); font-size:14px; line-height:1.6; font-style:italic;">
+                "Este rincón se autodestruirá cuando el reloj llegue a cero. Lee con atención lo que dejé hoy para ti..."
+            </p>
+            <!-- Aquí puedes meter el texto de tu carta local -->
+            <div style="margin-top:20px; text-align:left; font-size:15px; border-top:1px dashed #ccc; padding-top:15px;">
+                Escribe aquí el contenido de tu carta diaria...
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. EL RETO DE LOS 8 MINUTOS -->
+    <div id="modal-reto" class="modal-overlay" onclick="closeModalOutside(event, 'modal-reto')">
+        <div class="modal-card">
+            <button class="btn-close-modal" onclick="closeModal('modal-reto')">✕</button>
+            <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:15px;">📅 Reto del Día</h3>
+            <div id="pregunta-reto" style="background:#FDFDFD; padding:20px; border:var(--border-soft); border-radius:12px; font-weight:600; margin-bottom:20px; font-size:15px; line-height:1.5;">
+                ¿Cuál es la canción o melodía que siempre te recuerda a nuestro primer instante juntos?
+            </div>
+            <button class="btn-help" onclick="cambiarPreguntaAleatoria()" style="width:100%; padding:12px;">🎲 Generar otra pregunta</button>
+        </div>
+    </div>
+
+    <!-- 3. BOTÓN DE ENCUENTRO -->
+    <div id="modal-encuentro" class="modal-overlay" onclick="closeModalOutside(event, 'modal-encuentro')">
+        <div class="modal-card" style="text-align:center;">
+            <button class="btn-close-modal" onclick="closeModal('modal-encuentro')">✕</button>
+            <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:10px;">✨ Alerta de Encuentro</h3>
+            <p style="font-size:14px; color:var(--text-muted); margin-bottom:25px;">Presiona el botón para indicarle al otro que quieres verlo hoy.</p>
+            <button onclick="enviarAlertaEncuentro()" style="background:var(--accent-warm); color:white; border:none; padding:15px 30px; font-size:15px; font-weight:600; border-radius:50px; cursor:pointer; box-shadow:var(--smooth-shadow); width:100%; margin-bottom:20px;">
+                📍 ¡Quiero verte en persona hoy!
+            </button>
+            <div style="font-size:13px; font-weight:600; margin-bottom:10px;">Consultar Disponibilidad:</div>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button class="btn-help" onclick="setDisponibilidad('Inmediata')">⚡ Inmediata</button>
+                <button class="btn-help" onclick="setDisponibilidad('Más tarde')">🕒 Más tarde</button>
+                <button class="btn-help" onclick="setDisponibilidad('Mañana')">🗓️ Mañana</button>
+            </div>
+            <div id="status-encuentro" style="margin-top:20px; font-size:13px; color:var(--accent-warm); font-weight:600;"></div>
+        </div>
+    </div>
+
+    <!-- 4. NUESTRO DIARIO VISUAL -->
+    <div id="modal-diario" class="modal-overlay" onclick="closeModalOutside(event, 'modal-diario')">
+        <div class="modal-card">
+            <button class="btn-close-modal" onclick="closeModal('modal-diario')">✕</button>
+            <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:15px;">🎞️ Diario Visual</h3>
+            <!-- Contenedor de la foto Polaroid local -->
+            <div style="background:#FFF; padding:12px; border:var(--border-soft); box-shadow:var(--smooth-shadow); border-radius:4px; margin-bottom:15px;">
+                <div style="width:100%; height:250px; background:#ECE9E2; border-radius:2px; overflow:hidden;">
+                    <!-- Reemplaza "diario_foto.jpg" por tu foto local en tu carpeta -->
+                    <img src="diario_foto.jpg" alt="Nuestro Momento" style="width:100%; height:100%; object-fit:cover; onerror:this.style.display='none';">
+                </div>
+                <div style="font-family:'Patrick Hand', cursive; font-size:20px; color:#4A4A4A; text-align:center; padding:15px 5px 5px 5px; line-height:1.3;">
+                    "Una captura de mi rincón favorito en el día de hoy, pensando en ti."
+                </div>
+            </div>
+            <p style="font-size:12px; color:var(--text-muted); text-align:center;">Para actualizar la foto y la dedicatoria, cambia el archivo 'diario_foto.jpg' y edita el texto en este bloque de tu código.</p>
+        </div>
+    </div>
+
+    <!-- 5. NUESTRO CLIMA EMOCIONAL -->
+    <div id="modal-clima" class="modal-overlay" onclick="closeModalOutside(event, 'modal-clima')">
+        <div class="modal-card">
+            <button class="btn-close-modal" onclick="closeModal('modal-clima')">✕</button>
+            <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:10px; text-align:center;">🤍 Estado de Ánimo</h3>
+            <p style="font-size:13px; color:var(--text-muted); text-align:center; margin-bottom:20px;">Selecciona tu estado actual para actualizar el clima del santuario:</p>
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:20px;">
+                <button class="btn-help" style="padding:12px; font-size:14px;" onclick="seleccionarClima('☀️ Radiante / Feliz')">☀️ Radiante</button>
+                <button class="btn-help" style="padding:12px; font-size:14px;" onclick="seleccionarClima('🔋 Cansado / Sin Energía')">🔋 Cansado</button>
+                <button class="btn-help" style="padding:12px; font-size:14px;" onclick="seleccionarClima('🌧️ Nostálgico / Te Extraño')">🌧️ Nostálgico</button>
+                <button class="btn-help" style="padding:12px; font-size:14px;" onclick="seleccionarClima('🌀 Abrumado / Estrés')">🌀 Abrumado</button>
+                <button class="btn-help" style="padding:12px; font-size:14px;" onclick="seleccionarClima('🧸 Mimado / Necesito Amor')">🧸 Mimado</button>
+                <button class="btn-help" style="padding:12px; font-size:14px;" onclick="seleccionarClima('☕ Tranquilo / En Paz')">☕ Tranquilo</button>
+            </div>
+            <div id="clima-actual" style="background:var(--bg-cosy); padding:12px; border-radius:8px; text-align:center; font-size:13px; font-weight:600;">
+                Tu clima reportado: Ninguno seleccionado hoy
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. MURO DE GRATITUD ABIERTA -->
+    <div id="modal-gratitud" class="modal-overlay" onclick="closeModalOutside(event, 'modal-gratitud')">
+        <div class="modal-card">
+             <button class="btn-close-modal" onclick="closeModal('modal-gratitud')">✕</button>
+            <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:15px;">🙏 Gratitud Abierta</h3>
+            <div style="background:#FFFDF9; border-left:3px solid var(--accent-warm); padding:15px; border-radius:4px; font-family:'Patrick Hand', cursive; font-size:22px; line-height:1.5; color:#554E4D; max-height:220px; overflow-y:auto; margin-bottom:15px;">
+                "Gracias por escucharme con tanta paciencia anoche cuando me sentía abrumado. Saber que estás ahí me da una paz increíble."
+            </div>
+            <p style="font-size:12px; color:var(--text-muted); text-align:center;">Este es un lienzo libre para expresarnos gratitud sincera. Edita directamente este bloque de texto en tu archivo cuando desees dejar una nueva nota.</p>
+        </div>
+    </div>
+
+    <!-- 7. LA BANDA SONORA DEL DÍA -->
+    <div id="modal-banda" class="modal-overlay" onclick="closeModalOutside(event, 'modal-banda')">
+        <div class="modal-card" style="text-align:center;">
+            <button class="btn-close-modal" onclick="closeModal('modal-banda')">✕</button>
+            <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:15px;">🎵 Canción del Día</h3>
+            <div style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">Me hizo recordar a ti:</div>
+            <div style="font-size:18px; font-weight:600; margin-bottom:4px;">YOKO</div>
+            <div style="font-size:14px; color:var(--text-muted); margin-bottom:20px;">Alvaro Diaz</div>
+            
+            <div style="font-family:'Patrick Hand', cursive; font-size:22px; background:var(--bg-cosy); padding:15px; border-radius:12px; color:#554E4D; margin-bottom:20px; line-height:1.4;">
+                "La escuché camino a casa por la tarde y la letra me hizo reflexionar sobre lo afortunado que soy de tenerte."
+            </div>
+            <p style="font-size:12px; color:var(--text-muted);">Edita el título, el artista y tu reflexión directamente desde tu código local en GitHub.</p>
+        </div>
+    </div>
+         <script>
+        // CONFIGURACIÓN DE TUS ARCHIVOS LOCALES DE NOTAS DE VOZ
+        // Agrega aquí los nombres de tus archivos .mp3 guardados en tu carpeta
+        const voiceNotesFiles = [
+            "nota1.mp3",
+            "nota2.mp3",
+            "nota3.mp3",
+            "nota4.mp3"
+        ];
+
+        // CONFIGURACIÓN DE PREGUNTAS ALEATORIAS PARA EL RETO DE LOS 8 MINUTOS
+        const preguntasReto = [
+            "¿Cuál es la canción o melodía que siempre te recuerda a nuestro primer instante juntos?",
+            "Si tuviéramos exactamente 8 minutos libres en este momento, ¿qué plan rápido harías conmigo?",
+            "¿Qué pequeño detalle o hábito mío te hace sonreír cuando estás teniendo un día difícil?",
+            "¿Cuál ha sido el viaje o la caminata más bonita y en paz que hemos compartido hasta ahora?",
+            "Si pudieras congelar un solo recuerdo de nosotros para siempre, ¿cuál elegirías?"
+        ];
+
+        // CONTROLES DE LA MÚSICA DE FONDO
+        const bgMusic = document.getElementById('bg-music');
+        let isMuted = true; // Empieza muteado para cumplir reglas de seguridad de navegadores
+
+        function toggleMuteBg() {
+            if (isMuted) {
+                bgMusic.play().catch(err => console.log("Se requiere interacción para reproducir."));
+                bgMusic.muted = false;
+                isMuted = false;
+            } else {
+                bgMusic.muted = true;
+                isMuted = true;
+            }
+        }
+
+        function changeBgVolume(volume) {
+            bgMusic.volume = volume;
+        }
+
+        // CONTROL DE VENTANAS EMERGENTES (MODALES)
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            if (id === 'modal-capsula') startCapsulaTimer();
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            if (id === 'modal-capsula') stopCapsulaTimer();
+        }
+
+        function closeModalOutside(event, id) {
+            if (event.target.id === id) closeModal(id);
+        }
+
+        // LÓGICA DE LA CÁPSULA DE 8 MINUTOS (CUENTA REGRESIVA)
+        let capsulaTime = 480; // 8 minutos en segundos
+        let capsulaInterval;
+
+        function startCapsulaTimer() {
+            capsulaTime = 480;
+            clearInterval(capsulaInterval);
+            capsulaInterval = setInterval(() => {
+                capsulaTime--;
+                let mins = Math.floor(capsulaTime / 60);
+                let secs = capsulaTime % 60;
+                document.getElementById('capsula-timer').textContent = 
+                    (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+
+                if (capsulaTime <= 0) {
+                    clearInterval(capsulaInterval);
+                    document.getElementById('capsula-timer').textContent = "CERRADO 🔒";
+                    alert("La cápsula de 8 minutos se ha cerrado por hoy.");
+                    closeModal('modal-capsula');
+                }
+            }, 1000);
+        }
+
+        function stopCapsulaTimer() {
+            clearInterval(capsulaInterval);
+        }
+
+        // LÓGICA DEL RETO DIARIO (PREGUNTAS)
+        function cambiarPreguntaAleatoria() {
+            const index = Math.floor(Math.random() * preguntasReto.length);
+            document.getElementById('pregunta-reto').textContent = preguntasReto[index];
+        }
+
+        // LÓGICA DEL BOTÓN DE ENCUENTRO Y CLIMA EMOCIONAL (LOCALES)
+        function enviarAlertaEncuentro() {
+            document.getElementById('status-encuentro').textContent = "📍 Alerta marcada localmente. ¡Prepara el plan!";
+        }
+
+        function setDisponibilidad(valor) {
+            document.getElementById('status-encuentro').textContent = "⚡ Disponibilidad marcada como: " + valor;
+        }
+
+        function seleccionarClima(valor) {
+            document.getElementById('clima-actual').textContent = "Tu clima reportado hoy: " + valor;
+        }
+
+        // --- GENERADOR DE AUDIOS DE VOZ FLOTANTES (BUBBLES) ---
+        const activeAudioPlayer = new Audio();
+
+        function createVoiceBubbles() {
+            const layer = document.getElementById('bubbles-layer');
+            if (!layer) return;
+
+            voiceNotesFiles.forEach((file, index) => {
+                const bubble = document.createElement('div');
+                bubble.className = 'voice-bubble';
+                bubble.textContent = "🎙️";
+                
+                // Distribución aleatoria por toda la pantalla de forma estética
+                bubble.style.top = Math.floor(Math.random() * 65 + 15) + "vh";
+                bubble.style.left = Math.floor(Math.random() * 75 + 10) + "vw";
+                
+                // Pequeño desfase de animación para que se muevan asincrónicamente
+                bubble.style.animationDelay = (index * 1.5) + "s";
+
+                bubble.addEventListener('click', () => {
+                    // Pausa la música de fondo para que pueda escuchar tu voz con claridad
+                    if (!bgMusic.muted) bgMusic.pause();
+                    
+                    activeAudioPlayer.src = file;
+                    activeAudioPlayer.load();
+                    activeAudioPlayer.play().catch(err => alert("Revisa que el archivo " + file + " esté en tu carpeta."));
+                    
+                    // Al terminar tu nota de voz, la música de fondo se reanuda sola
+                    activeAudioPlayer.onended = () => {
+                        if (!bgMusic.muted) bgMusic.play();
+                    };
+                });
+
+                layer.appendChild(bubble);
+            });
+        }
+
+        // Inicializar las burbujas al cargar la pantalla
+        window.addEventListener('DOMContentLoaded', createVoiceBubbles);
+    </script>
+</body>
+</html>
