@@ -4,21 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuestro Santuario ✨</title>
-    <!-- Tipografías Acogedoras y Elegantes de Google Fonts -->
+    <!-- Contador de visitas invisible (No altera el diseño) -->
+    <img src="https://counter.dev" alt="" style="display:none; visibility:hidden; width:0; height:0; position:absolute;">
+    
+    <!-- Tipografías de Google Fonts -->
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
     <link href="https://googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
+            --bg-cream: #FDFBF7; /* Fondo papel de ilustración */
             --bg-cosy: #F7F4EF; /* Arena suave */
-            --text-dark: #3D3433; /* Marrón chocolate tenue */
+            --text-dark: #3D3433; /* Marrón chocolate */
             --text-muted: #7A6F6E;
             --accent-warm: #D4A373; /* Terracota / Oro viejo */
             --box-bg: #FFFFFF;
-            --overlay-bg: rgba(61, 52, 51, 0.4);
-            --smooth-shadow: 0 10px 40px rgba(61, 52, 51, 0.06);
             --border-soft: 1px solid rgba(61, 52, 51, 0.12);
+            --smooth-shadow: 0 10px 40px rgba(61, 52, 51, 0.06);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,181 +39,127 @@
             align-items: center;
         }
 
-        /* --- CONTROL DISCRETO DE AMBIENTE --- */
-        .ambient-controller {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--box-bg);
-            border: var(--border-soft);
-            padding: 10px 15px;
-            border-radius: 30px;
-            box-shadow: var(--smooth-shadow);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 100;
-            font-size: 13px;
-        }
-
-        .ambient-controller input[type="range"] {
-            width: 80px;
-            accent-color: var(--accent-warm);
-            cursor: pointer;
-        }
-
-        .btn-mute {
-            background: none; border: none; cursor: pointer; font-size: 16px;
-        }
-
-        /* --- MENÚ PRINCIPAL --- */
-        .header-santuario {
-            text-align: center;
-            margin-top: 60px;
-            margin-bottom: 40px;
-            max-width: 500px;
-            z-index: 10;
-        }
-
-        .header-santuario h1 {
-            font-family: 'Instrument Serif', serif;
-            font-size: 48px;
-            font-weight: 400;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-        }
-
-        .header-santuario p {
-            font-size: 14px;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-        }
-
-        .grid-santuario {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            width: 100%;
-            max-width: 480px;
-            z-index: 10;
-            margin-bottom: 60px;
-        }
-
-        .btn-santuario {
-            background: var(--box-bg);
-            border: var(--border-soft);
-            padding: 22px 24px;
-            border-radius: 18px;
-            text-align: left;
-            cursor: pointer;
-            box-shadow: var(--smooth-shadow);
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .btn-santuario:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 45px rgba(61, 52, 51, 0.1);
-        }
-
-        .btn-santuario .btn-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .btn-santuario .btn-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        /* --- AUDIOS DE VOZ FLOTANTES (BUBBLES) --- */
-        .voice-bubble {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.6);
-            border: var(--border-soft);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: var(--smooth-shadow);
-            z-index: 5;
-            font-size: 16px;
-            transition: transform 0.3s ease, background-color 0.3s;
-            animation: drift 6s infinite ease-in-out;
-        }
-
-        .voice-bubble:hover {
-            background: var(--box-bg);
-            transform: scale(1.1);
-        }
-
-        /* --- VENTANAS EMERGENTES (MODALES) --- */
-        .modal-overlay {
+        /* --- PANTALLA DE INTRODUCCIÓN CÁLIDA --- */
+        #intro-screen {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--overlay-bg);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 500;
+            background-color: var(--bg-cosy);
+            z-index: 2000;
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s;
             padding: 20px;
+            transition: opacity 0.8s ease, visibility 0.8s;
         }
 
-        .modal-overlay.active { opacity: 1; visibility: visible; }
+        #intro-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        .modal-card {
+        .manifesto-card {
             background: var(--box-bg);
             border: var(--border-soft);
             border-radius: 24px;
-            padding: 30px 24px;
-            max-width: 440px;
+            padding: 40px 30px;
+            max-width: 520px;
             width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            position: relative;
-            transform: translateY(20px);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             max-height: 90vh;
             overflow-y: auto;
+            box-shadow: var(--smooth-shadow);
+            text-align: left;
         }
 
-        .modal-overlay.active .modal-card { transform: translateY(0); }
-
-        .btn-close-modal {
-            position: absolute;
-            top: 20px; right: 20px;
-            background: var(--bg-cosy);
-            border: none;
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 12px;
+        .manifesto-card h2 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 38px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            text-align: center;
             color: var(--text-dark);
-            display: flex; align-items: center; justify-content: center;
         }
 
-        @keyframes drift {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-15px) translateX(8px); }
+        .manifesto-section { margin-bottom: 20px; }
+        .manifesto-section h3 { font-size: 15px; font-weight: 600; color: var(--accent-warm); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .manifesto-section p { font-size: 14px; color: var(--text-muted); line-height: 1.6; text-align: justify; }
+
+        .btn-enter-santuario {
+            display: block; width: 100%; background: var(--text-dark); color: white;
+            border: none; padding: 15px; border-radius: 50px; font-size: 14px; font-weight: 600;
+            cursor: pointer; margin-top: 25px; transition: background-color 0.2s; text-transform: uppercase; letter-spacing: 1px;
         }
+        .btn-enter-santuario:hover { background-color: var(--accent-warm); }
+
+        /* --- CONTROL DISCRETO DE AMBIENTE --- */
+        .ambient-controller {
+            position: absolute; top: 20px; right: 20px; background: var(--box-bg);
+            border: var(--border-soft); padding: 10px 15px; border-radius: 30px;
+            box-shadow: var(--smooth-shadow); display: flex; align-items: center; gap: 10px; z-index: 100; font-size: 13px;
+        }
+        .ambient-controller input[type="range"] { width: 80px; accent-color: var(--accent-warm); cursor: pointer; }
+        .btn-mute { background: none; border: none; cursor: pointer; font-size: 16px; }
+          /* --- MENÚ PRINCIPAL --- */
+        .header-santuario { text-align: center; margin-top: 60px; margin-bottom: 40px; max-width: 500px; z-index: 10; }
+        .header-santuario h1 { font-family: 'Instrument Serif', serif; font-size: 48px; font-weight: 400; letter-spacing: -0.5px; margin-bottom: 8px; }
+        .header-santuario p { font-size: 14px; color: var(--text-muted); letter-spacing: 0.5px; }
+
+        .grid-santuario { display: grid; grid-template-columns: 1fr; gap: 14px; width: 100%; max-width: 480px; z-index: 10; margin-bottom: 60px; }
+        .btn-santuario {
+            background: var(--box-bg); border: var(--border-soft); padding: 20px 22px; border-radius: 18px;
+            text-align: left; cursor: pointer; box-shadow: var(--smooth-shadow); display: flex; flex-direction: column; gap: 4px;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+        }
+        .btn-santuario:hover { transform: translateY(-2px); box-shadow: 0 15px 45px rgba(61, 52, 51, 0.1); }
+        .btn-santuario .btn-title { font-size: 16px; font-weight: 600; color: var(--text-dark); }
+        .btn-santuario .btn-desc { font-size: 13px; color: var(--text-muted); }
+
+        /* --- BUBBLES FLOTANTES --- */
+        .voice-bubble {
+            position: absolute; background: rgba(255, 255, 255, 0.6); border: var(--border-soft); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: var(--smooth-shadow); z-index: 5; font-size: 16px; animation: drift 6s infinite ease-in-out;
+        }
+        .voice-bubble:hover { background: var(--box-bg); transform: scale(1.1); }
+
+        /* --- MODALES --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(61, 52, 51, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 500; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s; padding: 20px; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-card { background: var(--box-bg); border: var(--border-soft); border-radius: 24px; padding: 30px 24px; max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.15); position: relative; transform: translateY(20px); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); max-height: 85vh; overflow-y: auto; }
+        .modal-overlay.active .modal-card { transform: translateY(0); }
+        .btn-close-modal { position: absolute; top: 20px; right: 20px; background: var(--bg-cosy); border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+
+        /* Estilos de inputs interactivos interiores */
+        .input-cosy { width: 100%; padding: 12px; border: var(--border-soft); border-radius: 12px; margin-bottom: 12px; font-family: inherit; font-size: 14px; outline: none; background: var(--bg-cream); }
+        .btn-help { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-cosy); border: 1px solid var(--text-dark); padding: 8px 14px; font-size: 12px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.1s; }
+        .btn-help:active { transform: scale(0.98); }
+
+        @keyframes drift { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-15px) translateX(8px); } }
     </style>
 </head>
-    <body>
+<body>
 
-    <!-- REPRODUCTOR DE MÚSICA DE FONDO (MENÚ PRINCIPAL) -->
-    <!-- Reemplaza "musica_fondo.mp3" por tu archivo real en GitHub -->
+    <!-- PANTALLA DE INTRODUCCIÓN (EL MANIFIESTO DE LOS 8 MINUTOS) -->
+    <div id="intro-screen">
+        <div class="manifesto-card">
+            <h2>El Concepto de los 8 Minutos</h2>
+            
+            <div class="manifesto-section">
+                <h3>💡 ¿Qué es esta regla?</h3>
+                <p>Una interacción intencional y profunda de exactamente 8 minutos es el tiempo perfecto para conectar con alguien que te importa sin abrumar la agenda. Nos recuerda que no importa qué tan ocupado esté el día, siempre hay tiempo para un momento de calidad.</p>
+            </div>
+
+            <div class="manifesto-section">
+                <h3>🎯 Objetivos de la Regla</h3>
+                <p>El objetivo principal es eliminar la fricción de la distancia y el tiempo. En 8 minutos no hay espacio para la monotonía; vamos directo al grano, compartiendo afecto, risas, sinceridad y vulnerabilidad pura, logrando que un instante breve resuene durante todo el día.</p>
+            </div>
+
+            <div class="manifesto-section">
+                <h3>🔒 Mis Objetivos Personales Contigo</h3>
+                <p>He construido este santuario como nuestro rincón seguro. Mi meta es que este espacio fortalezca nuestra confianza, nos una aún más y nos regale un refugio mutuo donde siempre podamos saber cómo está el otro, expresarnos gratitud, dedicarnos música y coleccionar nuestros días.</p>
+            </div>
+
+            <button class="btn-enter-santuario" onclick="enterSantuario()">Entrar al Santuario ✨</button>
+        </div>
+    </div>
+
+    <!-- REPRODUCTOR DE MÚSICA DE FONDO -->
     <audio id="bg-music" src="musica_fondo.mp3" loop></audio>
 
     <!-- CONTROL DISCRETO DE AMBIENTE -->
@@ -219,16 +168,15 @@
         <input type="range" id="bg-volume" min="0" max="1" step="0.05" value="0.5" oninput="changeBgVolume(this.value)">
     </div>
 
-    <!-- CONTENEDOR PARA LOS AUDIOS DE VOZ FLOTANTES (SE GENERAN POR JS) -->
+    <!-- CAPA PARA LAS NOTAS DE VOZ FLOTANTES -->
     <div id="bubbles-layer"></div>
 
-    <!-- ENCABEZADO DEL SANTUARIO -->
     <header class="header-santuario">
         <h1>Nuestro Santuario</h1>
         <p>Un espacio seguro diseñado para los dos ✨</p>
     </header>
 
-    <!-- MENÚ PRINCIPAL: 7 BOTONES INTERACTIVOS -->
+    <!-- MENÚ PRINCIPAL: 8 BOTONES INTERACTIVOS -->
     <nav class="grid-santuario">
         <button class="btn-santuario" onclick="openModal('modal-capsula')">
             <span class="btn-title">⏱️ La Cápsula de 8 Minutos</span>
@@ -247,7 +195,7 @@
 
         <button class="btn-santuario" onclick="openModal('modal-diario')">
             <span class="btn-title">🎞️ Nuestro Diario Visual</span>
-            <span class="btn-desc">Nuestra galería compartida de fotos con notas escritas a mano.</span>
+            <span class="btn-desc">Sube fotografías y textos en vivo en nuestra galería compartida.</span>
         </button>
 
         <button class="btn-santuario" onclick="openModal('modal-clima')">
@@ -264,10 +212,13 @@
             <span class="btn-title">🎵 La Banda Sonora del Día</span>
             <span class="btn-desc">La canción que escuchaste hoy y te hizo pensar en el otro.</span>
         </button>
+
+        <button class="btn-santuario" onclick="openModal('modal-notas-libres')">
+            <span class="btn-title">📝 Bitácora de Notas Libres</span>
+            <span class="btn-desc">Un diario compartido sin límites para escribir pensamientos libremente.</span>
+        </button>
     </nav>
-
-
-    <!-- ==================== VENTANAS EMERGENTES (MODALES) ==================== -->
+     <!-- ==================== VENTANAS EMERGENTES (MODALES - PARTE 1) ==================== -->
 
     <!-- 1. LA CÁPSULA DE 8 MINUTOS -->
     <div id="modal-capsula" class="modal-overlay" onclick="closeModalOutside(event, 'modal-capsula')">
@@ -276,11 +227,10 @@
             <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:15px;">⏱️ La Cápsula</h3>
             <div id="capsula-timer" style="font-size:42px; font-weight:600; color:var(--accent-warm); margin-bottom:20px;">08:00</div>
             <p style="color:var(--text-muted); font-size:14px; line-height:1.6; font-style:italic;">
-                "Este rincón se autodestruirá cuando el reloj llegue a cero. Lee con atención lo que dejé hoy para ti..."
+                "Este rincón se cerrará cuando el reloj llegue a cero. Lee con atención..."
             </p>
-            <!-- Aquí puedes meter el texto de tu carta local -->
             <div style="margin-top:20px; text-align:left; font-size:15px; border-top:1px dashed #ccc; padding-top:15px;">
-                Escribe aquí el contenido de tu carta diaria...
+                Escribe aquí el contenido de tu carta...
             </div>
         </div>
     </div>
@@ -302,8 +252,8 @@
         <div class="modal-card" style="text-align:center;">
             <button class="btn-close-modal" onclick="closeModal('modal-encuentro')">✕</button>
             <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:10px;">✨ Alerta de Encuentro</h3>
-            <p style="font-size:14px; color:var(--text-muted); margin-bottom:25px;">Presiona el botón para indicarle al otro que quieres verlo hoy.</p>
-            <button onclick="enviarAlertaEncuentro()" style="background:var(--accent-warm); color:white; border:none; padding:15px 30px; font-size:15px; font-weight:600; border-radius:50px; cursor:pointer; box-shadow:var(--smooth-shadow); width:100%; margin-bottom:20px;">
+            <p style="font-size:14px; color:var(--text-muted); margin-bottom:25px;">Presiona el botón para indicarle al otro que quieres verlo en persona.</p>
+            <button onclick="enviarAlertaEncuentro()" style="background:var(--accent-warm); color:white; border:none; padding:15px 30px; font-size:15px; font-weight:600; border-radius:50px; cursor:pointer; width:100%; margin-bottom:20px;">
                 📍 ¡Quiero verte en persona hoy!
             </button>
             <div style="font-size:13px; font-weight:600; margin-bottom:10px;">Consultar Disponibilidad:</div>
@@ -321,19 +271,24 @@
         <div class="modal-card">
             <button class="btn-close-modal" onclick="closeModal('modal-diario')">✕</button>
             <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:15px;">🎞️ Diario Visual</h3>
-            <!-- Contenedor de la foto Polaroid local -->
-            <div style="background:#FFF; padding:12px; border:var(--border-soft); box-shadow:var(--smooth-shadow); border-radius:4px; margin-bottom:15px;">
-                <div style="width:100%; height:250px; background:#ECE9E2; border-radius:2px; overflow:hidden;">
-                    <!-- Reemplaza "diario_foto.jpg" por tu foto local en tu carpeta -->
-                    <img src="diario_foto.jpg" alt="Nuestro Momento" style="width:100%; height:100%; object-fit:cover; onerror:this.style.display='none';">
+            
+            <div style="margin-bottom: 20px; background: var(--bg-cosy); padding: 15px; border-radius: 14px; border: 1px dashed var(--accent-warm);">
+                <input type="file" id="diario-upload" accept="image/*" class="input-cosy" style="background:#fff; padding:8px;">
+                <input type="text" id="diario-text-input" placeholder="Escribe un breve texto manuscrito..." class="input-cosy" style="margin-bottom:10px;">
+                <button class="btn-help" onclick="actualizarDiarioVisual()" style="width:100%;">Estampar en el Diario 🎞️</button>
+            </div>
+
+            <div style="background:#FFF; padding:12px; border:var(--border-soft); box-shadow:var(--smooth-shadow); border-radius:4px; margin-bottom:10px;">
+                <div style="width:100%; height:250px; background:#ECE9E2; border-radius:2px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+                    <img id="diario-img-placeholder" src="diario_foto.jpg" alt="Nuestro Momento" style="width:100%; height:100%; object-fit:cover;">
                 </div>
-                <div style="font-family:'Patrick Hand', cursive; font-size:20px; color:#4A4A4A; text-align:center; padding:15px 5px 5px 5px; line-height:1.3;">
-                    "Una captura de mi rincón favorito en el día de hoy, pensando en ti."
+                <div id="diario-text-placeholder" style="font-family:'Patrick Hand', cursive; font-size:22px; color:#4A4A4A; text-align:center; padding:15px 5px 5px 5px; line-height:1.3;">
+                    "Selecciona una foto arriba para inmortalizar el momento aquí."
                 </div>
             </div>
-            <p style="font-size:12px; color:var(--text-muted); text-align:center;">Para actualizar la foto y la dedicatoria, cambia el archivo 'diario_foto.jpg' y edita el texto en este bloque de tu código.</p>
         </div>
     </div>
+      <!-- ==================== VENTANAS EMERGENTES (MODALES - PARTE 2) ==================== -->
 
     <!-- 5. NUESTRO CLIMA EMOCIONAL -->
     <div id="modal-clima" class="modal-overlay" onclick="closeModalOutside(event, 'modal-clima')">
@@ -358,7 +313,7 @@
     <!-- 6. MURO DE GRATITUD ABIERTA -->
     <div id="modal-gratitud" class="modal-overlay" onclick="closeModalOutside(event, 'modal-gratitud')">
         <div class="modal-card">
-             <button class="btn-close-modal" onclick="closeModal('modal-gratitud')">✕</button>
+            <button class="btn-close-modal" onclick="closeModal('modal-gratitud')">✕</button>
             <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:15px;">🙏 Gratitud Abierta</h3>
             <div style="background:#FFFDF9; border-left:3px solid var(--accent-warm); padding:15px; border-radius:4px; font-family:'Patrick Hand', cursive; font-size:22px; line-height:1.5; color:#554E4D; max-height:220px; overflow-y:auto; margin-bottom:15px;">
                 "Gracias por escucharme con tanta paciencia anoche cuando me sentía abrumado. Saber que estás ahí me da una paz increíble."
@@ -382,9 +337,27 @@
             <p style="font-size:12px; color:var(--text-muted);">Edita el título, el artista y tu reflexión directamente desde tu código local en GitHub.</p>
         </div>
     </div>
-         <script>
+
+    <!-- 8. BITÁCORA DE NOTAS LIBRES -->
+    <div id="modal-notas-libres" class="modal-overlay" onclick="closeModalOutside(event, 'modal-notas-libres')">
+        <div class="modal-card" style="max-width:460px;">
+            <button class="btn-close-modal" onclick="closeModal('modal-notas-libres')">✕</button>
+            <h3 style="font-family:'Instrument Serif', serif; font-size:32px; margin-bottom:15px;">📝 Diario de Notas</h3>
+            
+            <div style="margin-bottom:20px;">
+                <textarea id="nota-libre-input" placeholder="Escribe un pensamiento, desahogo o un mensaje libre aquí..." rows="4" class="input-cosy" style="border-radius:12px; resize:none; padding:12px; line-height:1.5;"></textarea>
+                <button class="btn-help" onclick="guardarNotaLibre()" style="width:100%; padding:10px;">Guardar en el Diario ✍️</button>
+            </div>
+
+            <div style="font-size:13px; font-weight:600; margin-bottom:10px; text-align:left; border-bottom:1px solid rgba(0,0,0,0.1); padding-bottom:5px;">📋 Pensamientos Registrados:</div>
+            
+            <div id="lista-notas-libres" style="max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;">
+                <!-- Rellenado por JS localmente -->
+            </div>
+        </div>
+    </div>
+      <script>
         // CONFIGURACIÓN DE TUS ARCHIVOS LOCALES DE NOTAS DE VOZ
-        // Agrega aquí los nombres de tus archivos .mp3 guardados en tu carpeta
         const voiceNotesFiles = [
             "nota1.mp3",
             "nota2.mp3",
@@ -392,7 +365,7 @@
             "nota4.mp3"
         ];
 
-        // CONFIGURACIÓN DE PREGUNTAS ALEATORIAS PARA EL RETO DE LOS 8 MINUTOS
+        // CONFIGURACIÓN DE PREGUNTAS ALEATORIAS
         const preguntasReto = [
             "¿Cuál es la canción o melodía que siempre te recuerda a nuestro primer instante juntos?",
             "Si tuviéramos exactamente 8 minutos libres en este momento, ¿qué plan rápido harías conmigo?",
@@ -403,11 +376,11 @@
 
         // CONTROLES DE LA MÚSICA DE FONDO
         const bgMusic = document.getElementById('bg-music');
-        let isMuted = true; // Empieza muteado para cumplir reglas de seguridad de navegadores
+        let isMuted = true;
 
         function toggleMuteBg() {
             if (isMuted) {
-                bgMusic.play().catch(err => console.log("Se requiere interacción para reproducir."));
+                bgMusic.play().catch(err => console.log("Se requiere interacción."));
                 bgMusic.muted = false;
                 isMuted = false;
             } else {
@@ -420,7 +393,16 @@
             bgMusic.volume = volume;
         }
 
-        // CONTROL DE VENTANAS EMERGENTES (MODALES)
+        // CONTROL DE PANTALLA DE INTRODUCCIÓN
+        function enterSantuario() {
+            document.getElementById('intro-screen').classList.add('hidden');
+            bgMusic.play().then(() => {
+                bgMusic.muted = false;
+                isMuted = false;
+            }).catch(err => console.log("Música en espera."));
+        }
+
+        // CONTROL DE MODALES
         function openModal(id) {
             document.getElementById(id).classList.add('active');
             if (id === 'modal-capsula') startCapsulaTimer();
@@ -435,8 +417,8 @@
             if (event.target.id === id) closeModal(id);
         }
 
-        // LÓGICA DE LA CÁPSULA DE 8 MINUTOS (CUENTA REGRESIVA)
-        let capsulaTime = 480; // 8 minutos en segundos
+        // CÁPSULA DE 8 MINUTOS
+        let capsulaTime = 480;
         let capsulaInterval;
 
         function startCapsulaTimer() {
@@ -462,13 +444,13 @@
             clearInterval(capsulaInterval);
         }
 
-        // LÓGICA DEL RETO DIARIO (PREGUNTAS)
+        // RETO DIARIO
         function cambiarPreguntaAleatoria() {
             const index = Math.floor(Math.random() * preguntasReto.length);
             document.getElementById('pregunta-reto').textContent = preguntasReto[index];
         }
 
-        // LÓGICA DEL BOTÓN DE ENCUENTRO Y CLIMA EMOCIONAL (LOCALES)
+        // ENCUENTRO Y CLIMA
         function enviarAlertaEncuentro() {
             document.getElementById('status-encuentro').textContent = "📍 Alerta marcada localmente. ¡Prepara el plan!";
         }
@@ -481,7 +463,79 @@
             document.getElementById('clima-actual').textContent = "Tu clima reportado hoy: " + valor;
         }
 
-        // --- GENERADOR DE AUDIOS DE VOZ FLOTANTES (BUBBLES) ---
+        // DIARIO VISUAL (LOCAL STORAGE)
+        function actualizarDiarioVisual() {
+            const fileInput = document.getElementById('diario-upload');
+            const textInput = document.getElementById('diario-text-input');
+            const imgPlaceholder = document.getElementById('diario-img-placeholder');
+            const textPlaceholder = document.getElementById('diario-text-placeholder');
+            const textValue = textInput.value.trim();
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgBase64 = e.target.result;
+                    localStorage.setItem('santuario_diario_img', imgBase64);
+                    if (textValue) localStorage.setItem('santuario_diario_text', textValue);
+
+                    imgPlaceholder.src = imgBase64;
+                    if (textValue) textPlaceholder.textContent = '"' + textValue + '"';
+                    
+                    textInput.value = ""; fileInput.value = "";
+                    alert("¡Fotografía y nota estampadas con éxito! 🎞️");
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else if (textValue) {
+                localStorage.setItem('santuario_diario_text', textValue);
+                textPlaceholder.textContent = '"' + textValue + '"';
+                textInput.value = "";
+                alert("¡Nota del Diario actualizada! 📝");
+            } else {
+                alert("Por favor selecciona una foto o escribe una dedicatoria.");
+            }
+        }
+
+        // BITÁCORA DE NOTAS LIBRES (LOCAL STORAGE)
+        function guardarNotaLibre() {
+            const textarea = document.getElementById('nota-libre-input');
+            const textValue = textarea.value.trim();
+            if (!textValue) return alert("Escribe algo antes de guardar.");
+
+            const ahora = new Date();
+            const fechaStr = ahora.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) + ' ' + ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            const nuevaNota = { fecha: fechaStr, contenido: textValue };
+
+            let notasGuardadas = JSON.parse(localStorage.getItem('santuario_notas_libres')) || [];
+            notasGuardadas.unshift(nuevaNota);
+
+            localStorage.setItem('santuario_notas_libres', JSON.stringify(notasGuardadas));
+            textarea.value = "";
+            cargarNotasLibresDOM();
+        }
+
+        function cargarNotasLibresDOM() {
+            const lista = document.getElementById('lista-notas-libres');
+            if (!lista) return;
+            lista.innerHTML = "";
+
+            let notasGuardadas = JSON.parse(localStorage.getItem('santuario_notas_libres')) || [];
+            if (notasGuardadas.length === 0) {
+                lista.innerHTML = `<div style="font-size:13px; color:var(--text-muted); text-align:center; padding:10px; font-style:italic;">No hay pensamientos registrados aún...</div>`;
+                return;
+            }
+
+            notasGuardadas.forEach(nota => {
+                const item = document.createElement('div');
+                item.style.cssText = "background:var(--bg-cosy); border:var(--border-soft); padding:12px; border-radius:12px; text-align:left;";
+                item.innerHTML = `
+                    <div style="font-size:11px; color:var(--accent-warm); font-weight:600; margin-bottom:4px;">📅 ${nota.fecha}</div>
+                    <div style="font-size:13px; line-height:1.4; color:var(--text-dark); white-space:pre-line;">${nota.contenido}</div>
+                `;
+                lista.appendChild(item);
+            });
+        }
+
+        // BUBBLES DE VOZ FLOTANTES
         const activeAudioPlayer = new Audio();
 
         function createVoiceBubbles() {
@@ -490,36 +544,33 @@
 
             voiceNotesFiles.forEach((file, index) => {
                 const bubble = document.createElement('div');
-                bubble.className = 'voice-bubble';
-                bubble.textContent = "🎙️";
-                
-                // Distribución aleatoria por toda la pantalla de forma estética
+                bubble.className = 'voice-bubble'; bubble.textContent = "🎙️";
                 bubble.style.top = Math.floor(Math.random() * 65 + 15) + "vh";
                 bubble.style.left = Math.floor(Math.random() * 75 + 10) + "vw";
-                
-                // Pequeño desfase de animación para que se muevan asincrónicamente
                 bubble.style.animationDelay = (index * 1.5) + "s";
 
                 bubble.addEventListener('click', () => {
-                    // Pausa la música de fondo para que pueda escuchar tu voz con claridad
                     if (!bgMusic.muted) bgMusic.pause();
+                    activeAudioPlayer.src = file; activeAudioPlayer.load();
+                    activeAudioPlayer.play().catch(err => console.log("Asigna el archivo mp3 local."));
                     
-                    activeAudioPlayer.src = file;
-                    activeAudioPlayer.load();
-                    activeAudioPlayer.play().catch(err => alert("Revisa que el archivo " + file + " esté en tu carpeta."));
-                    
-                    // Al terminar tu nota de voz, la música de fondo se reanuda sola
                     activeAudioPlayer.onended = () => {
-                        if (!bgMusic.muted) bgMusic.play();
+                        if (!bgMusic.muted) bgMusic.play().catch(e => console.log(e));
                     };
                 });
-
                 layer.appendChild(bubble);
             });
         }
 
-        // Inicializar las burbujas al cargar la pantalla
-        window.addEventListener('DOMContentLoaded', createVoiceBubbles);
+        // CARGA INICIAL
+        window.addEventListener('DOMContentLoaded', () => {
+            createVoiceBubbles();
+            cargarNotasLibresDOM();
+            const savedImg = localStorage.getItem('santuario_diario_img');
+            const savedText = localStorage.getItem('santuario_diario_text');
+            if (savedImg) document.getElementById('diario-img-placeholder').src = savedImg;
+            if (savedText) document.getElementById('diario-text-placeholder').textContent = '"' + savedText + '"';
+        });
     </script>
 </body>
 </html>
